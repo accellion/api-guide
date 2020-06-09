@@ -2,6 +2,5 @@
 
 Welcome to Accellion's API Guide.
 
-Our RESTful Enterprise API enables you to quickly develop apps that leverage the power of the Accellion Platform. Developers can build custom apps tailored to specific industry and business use cases, and integrate APIs within existing IT infrastructure.
+Accellion’s RESTful Enterprise API is programming language agnostic and enables you to quickly develop apps that leverage the power of the Accellion Platform. Developers can build custom apps tailored to specific industries, business use cases, and integrate them within an existing IT infrastructure. The APIs allow you to do an HTTPS GET, POST, DELETE or UPDATE.
 
-Currently, the project board contains sample code snippets in PHP script which are displayed on the right panel of the board. Snippets in other languages will be added subsequently. 
