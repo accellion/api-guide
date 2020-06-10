@@ -208,7 +208,7 @@ For obtaining an access token using the kiteworks Authorization Code Flow, you n
 
 <aside class="notice">
 
-You might need to specify grant_type when generating the code first. If the grant_type is not specified in the auth code request, you might get an error “grant_type was not specified” when requesting the token with that auth code saying the. One the grant_type is specified in the initial auth code request, the code works for the access token request. </aside>
+**grant_type** should be set to a value that is specific to its authentication flow type. </aside>
 
 ## Sequence Overview
 The sequence of the Authorization Code Flow is as follows:
