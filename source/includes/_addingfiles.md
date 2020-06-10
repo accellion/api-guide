@@ -48,6 +48,10 @@ If upload initialization was successful, response headers will contain **X-Accel
 **{ ..., "X-Accellion-Location": "http://homeurl.com/rest/uploads/1", ... }**
 Where **1** is an upload session ID. Use this ID to perform all further operations.
 
+<aside class="notice">
+
+Parameters should be passed in the “Body” of the request and not under the “Params” section. </aside>
+
 
 ### Retrieve Upload Session Data
 
