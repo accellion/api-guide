@@ -30,6 +30,7 @@ includes:
   - downloadingfiles
   - apioverview
   - commonactions
+  - samplecodejs
   - terminology
   - help
 
