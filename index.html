@@ -211,7 +211,7 @@
     </script>
   </head>
 
-  <body class="index" data-languages="[&quot;php&quot;,&quot;python&quot;,&quot;shell&quot;,&quot;json&quot;]">
+  <body class="index" data-languages="[&quot;php&quot;,&quot;python&quot;,&quot;shell&quot;,&quot;json&quot;,&quot;javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -225,6 +225,7 @@
               <a href="#" data-language-name="python">Python</a>
               <a href="#" data-language-name="shell">cURL</a>
               <a href="#" data-language-name="json">json</a>
+              <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -391,6 +392,23 @@
                   </li>
                   <li>
                     <a href="#send-mail" class="toc-h2 toc-link" data-title="Send mail">Send mail</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#sample-code-in-javascript" class="toc-h1 toc-link" data-title="Sample Code in JavaScript">Sample Code in JavaScript</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#download-a-file" class="toc-h2 toc-link" data-title="Download a File">Download a File</a>
+                  </li>
+                  <li>
+                    <a href="#upload-a-file" class="toc-h2 toc-link" data-title="Upload a File">Upload a File</a>
+                  </li>
+                  <li>
+                    <a href="#send-secure-mail" class="toc-h2 toc-link" data-title="Send Secure Mail">Send Secure Mail</a>
+                  </li>
+                  <li>
+                    <a href="#invite-a-user-to-a-folder" class="toc-h2 toc-link" data-title="Invite a User to a Folder">Invite a User to a Folder</a>
                   </li>
               </ul>
           </li>
@@ -771,7 +789,7 @@ return params;
 
 <aside class="notice">
 
-You might need to specify grant_type when generating the code first. If the grant_type is not specified in the auth code request, you might get an error “grant_type was not specified” when requesting the token with that auth code saying the. One the grant_type is specified in the initial auth code request, the code works for the access token request. </aside>
+**grant_type** should be set to a value that is specific to its authentication flow type. </aside>
 <h2 id='sequence-overview'>Sequence Overview</h2>
 <p>The sequence of the Authorization Code Flow is as follows:
 1.  The client initiates the flow by redirecting the user-agent (browser or web view component) to the appropriate authorization page on the server. The client includes its ID and a redirect URI to which the server will send the user back once access is granted or denied.
@@ -1158,6 +1176,10 @@ In the case of an error, this field might not indicate the object being acted up
 <p>If upload initialization was successful, response headers will contain <strong>X-Accellion-Location</strong> field with upload id value. For example:
 <strong>{ ..., &quot;X-Accellion-Location&quot;: &quot;http://homeurl.com/rest/uploads/1&quot;, ... }</strong>
 Where <strong>1</strong> is an upload session ID. Use this ID to perform all further operations.</p>
+
+<aside class="notice">
+
+Parameters should be passed in the “Body” of the request and not under the “Params” section. </aside>
 <h3 id='retrieve-upload-session-data'>Retrieve Upload Session Data</h3>
 <p>After initialization each upload session will have assigned an &quot;uri&quot; parameter. This parameter contains uri where all chunks for this upload session should be uploaded. To retrieve this parameter call:
 <strong>GET /uploads/{id}</strong></p>
@@ -2217,7 +2239,80 @@ The response body contains a JSON representation of the mail, including a id pro
 </span><span class="s">}</span><span class="err">
 </span><span class="s">response = requests.post(url=url, headers=headers, data=data)</span><span class="err">
 </span><span class="s">mail = response.json()</span><span class="err">
-</span></code></pre><h1 id='terminology'>Terminology</h1>
+</span></code></pre><h1 id='sample-code-in-javascript'>Sample Code in JavaScript</h1><h2 id='download-a-file'>Download a File</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">// Download a file:</span>
+<span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="kd">function</span> <span class="p">(</span><span class="nx">fileId</span><span class="p">,</span> <span class="nx">filename</span><span class="p">,</span> <span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"GET:"</span><span class="o">+</span><span class="nx">fileId</span><span class="p">);</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">({</span><span class="na">url</span><span class="p">:</span> <span class="nx">SERVER_URL</span> <span class="o">+</span> <span class="s2">"/rest/files/"</span> <span class="o">+</span> <span class="nx">fileId</span> <span class="o">+</span> <span class="s2">"/content"</span><span class="p">,</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span><span class="s2">"X-Accellion-Version"</span><span class="p">:</span> <span class="nx">API_VERSION</span><span class="p">}},(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">auth</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">TOKEN</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="nx">filename</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre><h2 id='upload-a-file'>Upload a File</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">// Upload a file:</span>
+<span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="kd">function</span> <span class="nx">uploadFile</span> <span class="p">(</span><span class="nx">fileId</span><span class="p">,</span> <span class="nx">filename</span><span class="p">,</span> <span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"MULTIPART:"</span><span class="o">+</span><span class="nx">fileId</span><span class="p">);</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="na">url</span><span class="p">:</span> <span class="nx">SERVER_URL</span><span class="o">+</span> <span class="s2">"/rest/folders/"</span> <span class="o">+</span> <span class="nx">fileId</span> <span class="o">+</span> <span class="s2">"/actions/file?returnEntity=true"</span><span class="p">,</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span><span class="s2">"X-Accellion-Version"</span><span class="p">:</span> <span class="nx">API_VERSION</span><span class="p">,</span><span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">},</span>
+      <span class="na">formData</span><span class="p">:</span> <span class="p">{</span><span class="na">file</span><span class="p">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">filename</span><span class="p">)}},(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">auth</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">TOKEN</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre>
+<p> </p>
+<h2 id='send-secure-mail'>Send Secure Mail</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">// Send secure mail:</span>
+<span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">to</span><span class="p">:[</span><span class="s2">"to1@test1.com"</span><span class="p">,</span><span class="s2">"to1@test2.com"</span><span class="p">],</span>       <span class="c1">// The TO field</span>
+  <span class="na">cc</span><span class="p">:[</span><span class="s2">"cc1@test1.com"</span><span class="p">,</span><span class="s2">"cc2@test2.com"</span><span class="p">],</span>       <span class="c1">// The CC field</span>
+  <span class="na">bcc</span><span class="p">:[</span><span class="s2">"bcc1@test1.com"</span><span class="p">,</span><span class="s2">"bcc2@test2.com"</span><span class="p">],</span>    <span class="c1">// The bcc field</span>
+  <span class="na">files</span><span class="p">:[</span><span class="mi">101</span><span class="p">,</span><span class="mi">338</span><span class="p">,</span><span class="mi">4445</span><span class="p">],</span>                       <span class="c1">// The file ID's on Accellion to attach</span>
+  <span class="na">draft</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>                               <span class="c1">// Save as draft</span>
+  <span class="na">watermark</span><span class="p">:</span> <span class="s2">"Confidential"</span><span class="p">,</span>                  <span class="c1">// The watermark text</span>
+  <span class="na">secureBody</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>                           <span class="c1">// Secure email body</span>
+  <span class="na">selfCopy</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>                             <span class="c1">// Send copy to yourself</span>
+  <span class="na">includeFingerprint</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>                   <span class="c1">// Include hashes for the attached files</span>
+  <span class="na">body</span><span class="p">:</span> <span class="s2">"Hello World"</span><span class="p">,</span>                        <span class="c1">// The email body</span>
+  <span class="na">subject</span><span class="p">:</span> <span class="s2">"Here are some files"</span><span class="p">,</span>             <span class="c1">// The email subject</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">sendMail</span> <span class="p">(</span><span class="nx">email</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">{</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="na">url</span><span class="p">:</span> <span class="nx">SERVER_URL</span><span class="o">+</span> <span class="s2">"/mail/actions/sendFile?returnEntity=true"</span><span class="p">,</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span><span class="s2">"X-Accellion-Version"</span><span class="p">:</span> <span class="nx">API_VERSION</span><span class="p">,</span><span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">},</span>
+      <span class="na">form</span><span class="p">:</span> <span class="nx">email</span><span class="p">,(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">auth</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">TOKEN</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+<p> </p>
+<h2 id='invite-a-user-to-a-folder'>Invite a User to a Folder</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">// Invite user to a folder:</span>
+<span class="c1">//----------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cm">/**
+* @param {Number} id The id of the folder
+* @param {Array} emails The email addresses to add
+* @param {boolean} notify Send notification email
+* @param {Number} role The role id to assign to the users
+* @param {boolean} notifyFile Send notification on file additions
+*/</span>
+<span class="kd">function</span> <span class="nx">inviteUsersToFolder</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">emails</span><span class="p">,</span> <span class="nx">notify</span><span class="p">,</span> <span class="nx">role</span><span class="p">,</span> <span class="nx">notifyFile</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="p">{</span><span class="na">notify</span><span class="p">:</span> <span class="nx">notify</span><span class="p">,</span> <span class="na">emails</span><span class="p">:</span> <span class="nx">emails</span><span class="p">,</span> <span class="na">roleId</span><span class="p">:</span> <span class="nx">role</span><span class="p">,</span> <span class="na">notifyFileAdded</span><span class="p">:</span> <span class="nx">notifyFile</span><span class="p">};</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="na">url</span><span class="p">:</span> <span class="nx">SERVER_URL</span><span class="o">+</span> <span class="s2">"/folders/"</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s2">"/members?returnEntity=true&amp;mode=full&amp;updateIfExists=true&amp;partialSuccess=true"</span><span class="p">,</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span><span class="s2">"X-Accellion-Version"</span><span class="p">:</span> <span class="nx">API_VERSION</span><span class="p">,</span><span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">},</span>
+    <span class="na">form</span><span class="p">:</span> <span class="nx">item</span><span class="p">,(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="p">}).</span><span class="nx">auth</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">TOKEN</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre><h1 id='terminology'>Terminology</h1>
 <p><strong>Access Token</strong> - The token is used by the API client for authorization and can be used to make API calls.  There is a  <strong>lifetime</strong> given to each Access Token, and this is configured by the admin in <strong>Application</strong> &gt; <strong>Client Management</strong> &gt; <strong>Custom Applications</strong>, per client application.  After the lifetime is over, the token expires and is unusable. A <strong>refresh token</strong> can be used to obtain a new  <strong>access token</strong> after it expires. </p>
 
 <p><strong>API call</strong> - An API call is a general term for a HTTP request that is sent from the client to the server, to perform some kind of action.  Common <strong>HTTP methods</strong> are <strong>GET</strong> and <strong>POST</strong>.  GET requests data from a specified resource.  POST submits data to be processed by a specified resource.  See https://www.w3schools.com/tags/ref_httpmethods.asp for more information on HTTP methods.</p>
@@ -2274,6 +2369,7 @@ The response body contains a JSON representation of the mail, including a id pro
                 <a href="#" data-language-name="python">Python</a>
                 <a href="#" data-language-name="shell">cURL</a>
                 <a href="#" data-language-name="json">json</a>
+                <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
     </div>
